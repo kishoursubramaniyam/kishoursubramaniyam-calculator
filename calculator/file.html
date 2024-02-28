@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Calculator</title>
+	<link href="./style.css" rel="stylesheet" type="text/css">
+	</link>
+</head>
+
+<body>
+	<div class="toggle-container">
+		<input type="checkbox" id="themeToggle">
+		<label for="themeToggle">Toggle</label>
+	</div>
+
+	<h1>JavaScript Calculator</h1>
+	<p class="warning">Don't divide by Zero.</p>
+	<div id="calculator" class="calculator">
+		<div id="viewer" class="viewer">You broke it!</div>
+
+
+		<button id="clear" class="clear">C</button>
+		<button data-ops="sin" class="ops">sin</button>
+		<button data-ops="cos" class="ops">cos</button>
+		<button data-ops="tan" class="ops">tan</button>
+
+
+		<button data-ops="square" class="ops">x<sup>2</sup></button>
+		<button data-ops="cube" class="ops">x<sup>3</sup></button>
+		<button data-ops="power" class="ops">x<sup>y</sup></button>
+		<button data-ops="square root" class="ops">&#8730; x</button>
+
+
+		<button class="num" data-num="7">7</button>
+		<button class="num" data-num="8">8</button>
+		<button class="num" data-num="9">9</button>
+
+		<button data-ops="plus" class="ops">+</button>
+
+		<button class="num" data-num="4">4</button>
+		<button class="num" data-num="5">5</button>
+		<button class="num" data-num="6">6</button>
+
+		<button data-ops="minus" class="ops">-</button>
+
+		<button class="num" data-num="1">1</button>
+		<button class="num" data-num="2">2</button>
+		<button class="num" data-num="3">3</button>
+		<button data-ops="times" class="ops">*</button>
+		<button class="num" data-num="0">0</button>
+		<button class="num" data-num=".">.</button>
+		<button id="equals" class="equals" data-result="">=</button>
+
+		<button data-ops="divided by" class="ops">/</button>
+
+		<button id="reset" class="reset">Reset Universe?</button>
+	</div>
+    <div class="display2" id="display2">
+        MADE BY S.KISHOUR FOR CODSOFT WEB DEVELOPMENT INTERNSHIP LEVEL 1:-
+    </div>
+
+	<script src="./script.js"></script>
+	<script src="./dark-light-theme-toggle.js"></script>
+</body>
+
+
+</html>
+<style>
+    @import url("https://fonts.googleapis.com/css?family=DM+Serif+Text&display=swap");
+html {
+  background: #100a1c;
+  background-image: radial-gradient(
+      50% 30% ellipse at center top,
+      #201e40 0%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    radial-gradient(60% 50% ellipse at center bottom, #261226 0%, #100a1c 100%);
+  background-attachment: fixed;
+  color: #6cacc5;
+}
+
+body {
+  color: #6cacc5;
+  font: 300 25px/1.6 "DM Serif Text", serif;
+  margin: 0;
+  padding: 5em 0 2em;
+  text-align: center;
+}
+
+h1 {
+  font-weight: 300;
+  margin: 0;
+}
+
+/* Gradient text only on Webkit */
+.warning {
+  background: -webkit-linear-gradient(45deg, #44e4d1 10%, #d0f980 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #44e4d1;
+  font-weight: 400;
+  font-family: "DM Serif Text", serif;
+  margin: 0 auto 6em;
+  max-width: 9em;
+}
+
+.calculator {
+  font-size: 28px;
+  margin: 0 auto;
+  width: 10em;
+}
+
+.calculator::before,
+.calculator::after {
+  content: " ";
+  display: table;
+}
+
+.calculator::after {
+  clear: both;
+}
+
+/* Calculator after dividing by zero */
+.broken {
+  animation: broken 2s;
+  transform: translate3d(0, -2000px, 0);
+  opacity: 0;
+}
+
+.viewer {
+  border-top: 3px double;
+  border-right: 3px double;
+  border-bottom: 3px double;
+  border-left: 3px double;
+  padding: 2px;
+  color: #44e4d1;
+  margin: 0px auto;
+  line-height: 3em;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 10em;
+  height: 3em;
+  align-items: center;
+}
+
+button {
+  border: 0;
+  background: rgba(42, 50, 113, 0.28);
+  color: #6cacc5;
+  cursor: pointer;
+  float: left;
+  font: inherit;
+  margin: 0.25em;
+  width: 2em;
+  height: 2em;
+  transition: all 0.5s;
+  border-radius: 6px;
+}
+
+button:hover {
+  background: #201e40;
+}
+
+button:focus {
+  outline: 0;
+  /* The value fade-ins that appear */
+}
+
+button:focus::after {
+  animation: zoom 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+  content: attr(data-num);
+  cursor: default;
+  font-size: 100px;
+  position: absolute;
+  top: 1.5em;
+  left: 50%;
+  text-align: center;
+  margin-left: -24px;
+  opacity: 0;
+  width: 48px;
+}
+
+/* Same as above, modified for operators */
+.ops:focus::after {
+  content: attr(data-ops);
+  margin-left: -210px;
+  width: 420px;
+}
+
+/* Same as above, modified for result */
+.equals:focus::after {
+  content: attr(data-result);
+  margin-left: -300px;
+  width: 600px;
+}
+
+/* Reset button */
+.reset {
+  background: rgba(201, 120, 116, 0.28);
+  color: #44e4d1;
+  font-weight: 400;
+  margin-left: -77px;
+  padding: 0.5em 1em;
+  position: absolute;
+  top: -20em;
+  left: 50%;
+  width: auto;
+  height: auto;
+  /* When button is revealed */
+}
+
+.reset:hover {
+  background: #44e4d1;
+  color: #100a1c;
+}
+
+.reset.show {
+  top: 20em;
+  animation: fadein 4s;
+}
+
+/* Light mode theme colors and switcher */
+.light-theme {
+  background: #423e4d;
+  background: -webkit-linear-gradient(to right, #e9e4f0, #d3cce3);
+  background: linear-gradient(to right, #e9e4f0, #d3cce3);
+}
+
+.light-theme h1,
+.light-theme button {
+  color: #5a5569;
+}
+
+.light-theme button:hover {
+  background-color: #423e4d;
+  color: #d3cce3;
+}
+
+.light-theme button.equals {
+  color: #5a5569;
+}
+
+.light-theme .viewer {
+  color: #5a5569;
+}
+
+.light-theme .warning {
+  background: #5a5569;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #5a5569;
+}
+
+/* Styles for dark-light mode switcher */
+.toggle-container {
+  position: absolute;
+  top: 45px;
+  right: 45px;
+}
+
+input[type="checkbox"] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+label {
+  background: #6cacc5;
+  position: relative;
+  width: 65px;
+  height: 32px;
+  text-indent: -9999px;
+  float: right;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+label:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 26px;
+  height: 26px;
+  background: white;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+
+input:checked + label {
+  background: #5a5569;
+}
+
+input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+label:active:after {
+  width: 56px;
+}
+
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+  transition: all 750ms !important;
+  transition-delay: 0 !important;
+}
+
+/* Animations */
+/* Values that appear onclick */
+@keyframes zoom {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+
+  70% {
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Division by zero animation */
+@keyframes broken {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+
+  5% {
+    transform: rotate(5deg);
+  }
+
+  15% {
+    transform: rotate(-5deg);
+  }
+
+  20% {
+    transform: rotate(5deg);
+  }
+
+  25% {
+    transform: rotate(-5deg);
+  }
+
+  50% {
+    transform: rotate(45deg);
+  }
+
+  70% {
+    transform: translate3d(0, 2000px, 0);
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate3d(0, -2000px, 0);
+  }
+}
+
+/* Reset button fadein */
+@keyframes fadein {
+  0% {
+    top: 20em;
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 420px) {
+  .calculator {
+    width: 12em;
+  }
+
+  .viewer {
+    width: 8.5em;
+  }
+
+  button {
+    margin: 0.5em;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
+</style>
+<script>
+    /*
+TODO:
+    Limit number input
+    Clean up structure
+*/
+
+(function() {
+    "use strict";
+
+    // Shortcut to get elements
+    var el = function(element) {
+      if (element.charAt(0) === "#") { // If passed an ID...
+        return document.querySelector(element); // ... returns single element
+      }
+
+      return document.querySelectorAll(element); // Otherwise, returns a nodelist
+    };
+    // Variables
+    var viewer = el("#viewer"), // Calculator screen where result is displayed
+      equals = el("#equals"), // Equal button
+      nums = el(".num"), // List of numbers
+      ops = el(".ops"), // List of operators
+      theNum = "", // Current number
+      oldNum = "", // First number
+      resultNum, // Result
+      operator; // Batman
+
+    // When: Number is clicked. Get the current number selected
+    var setNum = function() {
+      //if . was pressed, then only do this if theNum doesn't already include a .
+      if ((this.getAttribute("data-num")==="." && theNum.indexOf(".") === -1) || this.getAttribute("data-num")!=="."){
+        if (resultNum) { // If a result was displayed, reset number
+          theNum = this.getAttribute("data-num");
+          resultNum = "";
+        } else { // Otherwise, add digit to previous number (this is a string!)
+          theNum += this.getAttribute("data-num");
+        }
+
+        viewer.innerHTML = theNum; // Display current number
+      }
+
+    };
+
+    // When: Number key is pressed. Get the current number selected
+    var setNumKey = function(keyPressed) {
+      //if . was pressed, then only do this if theNum doesn't already include a .
+      if ((keyPressed ==="." && theNum.indexOf(".") === -1) || keyPressed !=="."){
+        if (resultNum) { // If a result was displayed, reset number
+          theNum = keyPressed;
+          resultNum = "";
+        } else { // Otherwise, add digit to previous number (this is a string!)
+          theNum += keyPressed;
+        }
+
+         viewer.innerHTML = theNum; // Display current number
+       }
+    }
+
+    // When: Operator is clicked. Pass number to oldNum and save operator
+    var moveNum = function() {
+      oldNum = theNum;
+      theNum = "";
+      operator = this.getAttribute("data-ops");
+
+      equals.setAttribute("data-result", ""); // Reset result in attr
+    };
+
+    // When: Operator is clicked. Pass number to oldNum and save operator
+    var moveNumKey = function(wordOperator) {
+      oldNum = theNum;
+      theNum = "";
+      operator = wordOperator;
+
+      equals.setAttribute("data-result", ""); // Reset result in attr
+    };
+
+    // When: Equals is clicked. Calculate result
+    var displayNum = function() {
+
+      // Convert string input to numbers
+      oldNum = parseFloat(oldNum);
+      theNum = parseFloat(theNum);
+
+      // Perform operation
+      switch (operator) {
+        case "plus":
+          resultNum = oldNum + theNum;
+          break;
+
+        case "minus":
+          resultNum = oldNum - theNum;
+          break;
+
+        case "times":
+          resultNum = oldNum * theNum;
+          break;
+
+        case "divided by":
+          resultNum = oldNum / theNum;
+          break;
+
+        case "square":
+          resultNum = oldNum ** 2;
+          break;
+
+        case "cube":
+          resultNum = oldNum ** 3;
+          break;
+
+        case "square root":
+          resultNum = Math.sqrt(oldNum);
+          break;
+
+        case "power":
+          resultNum = oldNum ** theNum;
+          break;
+
+        case "sin":
+          resultNum = Math.sin(oldNum);
+          break;
+
+        case "cos":
+          resultNum = Math.cos(oldNum);
+          break;
+
+        case "tan":
+          resultNum = Math.tan(oldNum);
+          break;
+
+          // If equal is pressed without an operator, keep number and continue
+        default:
+          resultNum = theNum;
+      }
+
+      // If NaN or Infinity returned
+      if (!isFinite(resultNum)) {
+        if (!isInt(resultNum) || !isFloat(resultNum)) { // If result is not a number; set off by, eg, double-clicking operators
+          resultNum = "You broke it!";
+        } else { // If result is infinity, set off by dividing by zero
+          resultNum = "Look at what you've done";
+          el('#calculator').classList.add("broken"); // Break calculator
+          el('#reset').classList.add("show"); // And show reset button
+        }
+      }
+
+      // Display result, finally!
+      viewer.innerHTML = resultNum;
+      equals.setAttribute("data-result", resultNum);
+
+      // Now reset oldNum & keep result
+      oldNum = 0;
+      theNum = resultNum;
+
+    };
+
+    // When: Clear button is pressed. Clear everything
+    var clearAll = function() {
+      oldNum = "";
+      theNum = "";
+      viewer.innerHTML = "0";
+      equals.setAttribute("data-result", resultNum);
+    };
+
+    // When: Key is pressed, find out if it's a valid one and send to relevant function if so
+    var findKey = function(e){
+      if((e.key >= 0 && e.key <= 9) || e.key == "."){
+        setNumKey(e.key);
+      }
+      // Operator keys
+      switch (e.key) {
+        case "+":
+          moveNumKey("plus");
+          break;
+        case "-":
+          moveNumKey("minus");
+          break;
+        case "*":
+          moveNumKey("times");
+          break;
+        case "/":
+          moveNumKey("divided by");
+          break;
+        case "=":
+        case "Enter":
+          displayNum();
+          break;
+        case "Escape":
+        case "c":
+        case "C":
+          clearAll();
+          break;
+        // if another key is pressed then do nothing
+        default:
+          break;
+      }
+    }
+
+    /* The click events */
+
+    // Add click event to numbers
+    for (var i = 0, l = nums.length; i < l; i++) {
+      nums[i].onclick = setNum;
+    }
+
+    // Add click event to operators
+    for (var i = 0, l = ops.length; i < l; i++) {
+      ops[i].onclick = moveNum;
+    }
+
+    //Add keyboard event to use numbers and basic operators
+    document.onkeyup = findKey;
+
+    // Add click event to equal sign
+    equals.onclick = displayNum;
+
+    // Add click event to clear button
+    el("#clear").onclick = clearAll;
+
+    // Add click event to reset button
+    el("#reset").onclick = function() {
+      window.location = window.location;
+    };
+
+  }());
+</script>
